@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
@@ -10,30 +11,39 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Latitude"
-        android:inputType="numberDecimal" />
+        android:inputType="numberDecimal"
+        android:minHeight="48dp" />
 
     <EditText
         android:id="@+id/longitude_input"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Longitude"
-        android:inputType="numberDecimal" />
+        android:inputType="numberDecimal"
+        android:minHeight="48dp" />
 
     <EditText
         android:id="@+id/date_input"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:autofillHints=""
         android:hint="Date"
-        android:inputType="date" />
+        android:inputType="date"
+        android:minHeight="48dp"
+        tools:ignore="VisualLintTextFieldSize" />
 
     <EditText
         android:id="@+id/time_input"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:autofillHints=""
         android:hint="Time"
-        android:inputType="time" />
+        android:inputType="time"
+        android:minHeight="48dp"
+        android:textColorHint="#A1887F" />
 
     <LinearLayout
+        style="?android:attr/buttonBarStyle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
@@ -42,12 +52,14 @@
 
         <Button
             android:id="@+id/button1"
+            style="?android:attr/buttonBarButtonStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Button 1" />
 
         <Button
             android:id="@+id/button2"
+            style="?android:attr/buttonBarButtonStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="16dp"
