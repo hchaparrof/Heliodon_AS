@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/fragment_container"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <!-- Cruceta de 4 botones -->
     <Button
@@ -11,7 +13,9 @@
         android:layout_above="@+id/button_center"
         android:layout_alignLeft="@id/button_center"
         android:layout_marginBottom="10dp"
-        android:text="Up" />
+        android:backgroundTint="@android:color/holo_orange_dark"
+        android:textColor="@color/black"
+        android:text="car U" />
 
     <Button
         android:id="@+id/button_left"
@@ -19,8 +23,10 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/button_up"
         android:layout_marginEnd="20dp"
+        android:backgroundTint="@android:color/holo_green_light"
         android:layout_toStartOf="@+id/button_center"
-        android:text="Left" />
+        android:textColor="@color/black"
+        android:text="br iz" />
 
     <Button
         android:id="@+id/button_center"
@@ -28,7 +34,9 @@
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
-        android:text="Center" />
+        android:backgroundTint="@color/design_default_color_error"
+        android:textColor="@color/black"
+        android:text="stop" />
 
     <Button
         android:id="@+id/button_right"
@@ -37,7 +45,9 @@
         android:layout_below="@id/button_up"
         android:layout_marginStart="20dp"
         android:layout_toEndOf="@+id/button_center"
-        android:text="Right" />
+        android:backgroundTint="@android:color/holo_green_light"
+        android:textColor="@color/black"
+        android:text="br d" />
 
     <!-- Botones adicionales -->
 
@@ -48,16 +58,19 @@
         android:layout_below="@+id/button_left"
         android:layout_alignLeft="@id/button_center"
         android:layout_marginTop="10dp"
-        android:text="Down" />
+        android:backgroundTint="@android:color/holo_orange_dark"
+        android:textColor="@color/black"
+        android:text="car d" />
 
     <Button
         android:id="@+id/button_top1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-
         android:layout_alignLeft="@id/button_left"
         android:layout_alignTop="@id/button_up"
-        android:text="Top 1" />
+        android:backgroundTint="@color/purple_200"
+        android:textColor="@color/black"
+        android:text="az 1" />
 
     <Button
         android:id="@+id/button_top2"
@@ -65,7 +78,9 @@
         android:layout_height="wrap_content"
         android:layout_alignTop="@id/button_up"
         android:layout_alignLeft="@id/button_right"
-        android:text="Top 2" />
+        android:backgroundTint="@color/purple_200"
+        android:textColor="@color/black"
+        android:text="az 2" />
 
     <Button
         android:id="@+id/button_side1"
@@ -73,7 +88,9 @@
         android:layout_height="wrap_content"
         android:layout_alignTop="@id/button_down"
         android:layout_alignLeft= "@id/button_left"
-        android:text="Side 1" />
+        android:backgroundTint="@color/purple_700"
+        android:textColor="@color/black"
+        android:text="zen 1" />
 
     <Button
         android:id="@+id/button_side2"
@@ -81,5 +98,37 @@
         android:layout_height="wrap_content"
         android:layout_alignTop="@id/button_down"
         android:layout_alignLeft= "@id/button_right"
-        android:text="Side 2" />
+        android:backgroundTint="@color/purple_700"
+        android:textColor="@color/black"
+        android:text="zen 2" />
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="150dp"
+        android:background="@color/purple_200"
+        android:gravity="center"
+        android:text="posicion actual\nazimut: 165°\nzenit: 45°"
+        android:textAlignment="center"
+        android:textColor="@color/black"
+        android:textSize="14sp" />
+
+    <TextView
+        android:id="@+id/textView_2"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_below="@+id/textView"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="65dp"
+        android:layout_marginEnd="150dp"
+        android:background="@color/purple_200"
+        android:gravity="center"
+        android:text="posicion actual\nazimut: 165°\nzenit: 45°"
+        android:textAlignment="center"
+        android:textColor="@color/black"
+        android:textSize="14sp" />
+    <!--        app:layout_constraintBottom_toBottomOf="parent"-->
+<!--        app:layout_constraintEnd_toEndOf="parent" />-->
 </RelativeLayout>

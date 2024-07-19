@@ -41,6 +41,15 @@
         android:inputType="time"
         android:minHeight="48dp"
         android:textColorHint="#A1887F" />
+    <EditText
+        android:id="@+id/angulo_input"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:autofillHints=""
+        android:hint="angulo_relativo"
+        android:inputType="time"
+        android:minHeight="48dp"
+        android:textColorHint="#A1887F" />
 
     <LinearLayout
         style="?android:attr/buttonBarStyle"
@@ -55,7 +64,7 @@
             style="?android:attr/buttonBarButtonStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Button 1" />
+            android:text="aceptar" />
 
         <Button
             android:id="@+id/button2"
@@ -64,6 +73,6 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="16dp"
             android:layout_marginStart="16dp"
-            android:text="Button 2" />
+            android:text="Limpiar" />
     </LinearLayout>
 </LinearLayout>
