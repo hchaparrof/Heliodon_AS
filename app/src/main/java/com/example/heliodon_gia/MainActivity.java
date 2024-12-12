@@ -9,8 +9,8 @@ import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 import android.util.Log;
 
-public class MainActivity extends AppCompatActivity implements FragmentManager.OnBackStackChangedListener {
-    private static final String TAG = "MainActivity";
+public class MainActivity extends AppCompatActivity implements FragmentManager.OnBackStackChangedListener, FirstFragment.OnButtonClickListener_1 {
+    private static final String TAG = "MainActivity_2";
     public DeviceManager device_manager;
     public SerialManager serialManager;
     private ViewPager2 viewPager;
@@ -26,31 +26,9 @@ public class MainActivity extends AppCompatActivity implements FragmentManager.O
     }
 
 
-    void status(){
-        if (connected){
-            String s = String.valueOf(connected) + " " + ultima_llegada + String.valueOf(ultimo_envio);
-            Fragment fragment = getCurrentFragment();
-            if (fragment instanceof FirstFragment) {
-                Log.d(TAG, "En estatus");
-                ((FirstFragment) fragment).updateTextView(s);
-            } else if (fragment instanceof SecondFragment) {
-                Log.d(TAG, "SecondFragment encontrado_callback");
-            } else {
-                Log.d(TAG, "Ningún fragmento encontrado_callback");
-            }
-        }else{
-            Fragment fragment = getCurrentFragment();
-            if (fragment instanceof FirstFragment) {
-                Log.d(TAG, "En estatus");
-                ((FirstFragment) fragment).updateTextView("nada_aqui");
-            } else if (fragment instanceof SecondFragment) {
-                Log.d(TAG, "SecondFragment encontrado_callback");
-            } else {
-                Log.d(TAG, "Ningún fragmento encontrado_callback");
-            }
-        }
-    }
+
     SerialManager crear_serial_m(DeviceManager dev_man){
+        Log.d(TAG, "funcion_serial_manager_crear");
         return new SerialManager(this, dev_man.primer_dispo.device.getDeviceId(),dev_man.primer_dispo.port, dev_man.baudRate, dev_man.withIoManager);
     }
     @Override
@@ -129,11 +107,33 @@ public class MainActivity extends AppCompatActivity implements FragmentManager.O
     }
     private void manejar_onresume_serial(){
         if (this.serialManager != null){
-            Log.d(TAG, "serial_manager_no_nurlo");
+            Log.d(TAG, "serial_manager_no_nuelo");
             this.serialManager.usb_resume();
         }
     }
-
+    @Override
+    public void onPause() {
+//        manejar_onpause_serial();
+        super.onPause();
+    }
+    @Override
+    public void onStop() {
+//        manejar_onstop_serial();
+        super.onStop();
+    }
+    private void manejar_onpause_serial(){
+        if (this.serialManager != null){
+            Log.d(TAG, "serial_manager_no_nulo, pausa");
+            this.serialManager.usb_pause();
+        }
+    }
+    //onStop
+    private void manejar_onstop_serial(){
+        if (this.serialManager != null){
+            Log.d(TAG, "serial_manager_no_nulo, stop");
+            this.serialManager.usb_close();
+        }
+    }
     @Override
     public void onNewIntent(Intent intent) {
         Log.d(TAG, "ejecutando onnewintent");
@@ -152,5 +152,13 @@ public class MainActivity extends AppCompatActivity implements FragmentManager.O
     @Override
     public void onBackStackChanged() {
         getSupportActionBar().setDisplayHomeAsUpEnabled(getSupportFragmentManager().getBackStackEntryCount()>0);
+    }
+
+    @Override
+    public void onButton_1_Click(int a) {
+        Log.d(TAG, "se oprimio un boton en main" + String.valueOf(a));
+        if(this.serialManager != null) {
+            this.serialManager.send(String.valueOf(a));
+        }
     }
 }

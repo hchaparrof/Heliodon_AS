@@ -1,5 +1,4 @@
 package com.example.heliodon_gia;
-
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -15,7 +14,6 @@ import android.hardware.usb.UsbDeviceConnection;
 import android.os.Build;
 import android.app.PendingIntent;
 import android.util.Log;
-
 import androidx.annotation.NonNull;
 import androidx.lifecycle.Lifecycle;
 import androidx.lifecycle.LifecycleOwner;
@@ -23,20 +21,16 @@ import androidx.lifecycle.LifecycleRegistry;
 import android.content.IntentFilter;
 import java.io.IOException;
 import androidx.core.content.ContextCompat;
-
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import com.hoho.android.usbserial.util.HexDump;
 
-public class SerialManager implements SerialInputOutputManager.Listener, LifecycleOwner {
-    private static final String TAG = "MainActivity";
+public class SerialManager implements SerialInputOutputManager.Listener {
+    private static final String TAG = "MainActivity_2";
     private final BroadcastReceiver broadcastReceiver;
-    private LifecycleRegistry lifecycleRegistry = new LifecycleRegistry(this);
-    @NonNull
-    @Override
-    public Lifecycle getLifecycle() {
-        return lifecycleRegistry;
-    }
+//    private LifecycleRegistry lifecycleRegistry = new LifecycleRegistry(this);
+    private StringBuilder messageBuffer = new StringBuilder();
+
 
     private enum UsbPermission { Unknown, Requested, Granted, Denied }
     private static final String INTENT_ACTION_GRANT_USB = BuildConfig.APPLICATION_ID + ".GRANT_USB";
@@ -48,8 +42,9 @@ public class SerialManager implements SerialInputOutputManager.Listener, Lifecyc
     private boolean withIoManager;
     private SerialInputOutputManager usbIoManager;
     private boolean connected = false;
-    private static final int WRITE_WAIT_MILLIS = 2000;
+    private static final int WRITE_WAIT_MILLIS = 30;
     private static final int READ_WAIT_MILLIS = 2000;
+    private static final String MESSAGE_DELIMITER = "\n";
 
     public SerialManager(Context context, int deviceId_arg, int portNum_arg, int baudRate_arg, boolean withIoManager_arg) {
         this.context = context;
@@ -68,17 +63,10 @@ public class SerialManager implements SerialInputOutputManager.Listener, Lifecyc
             }
         };
         mainLooper = new Handler(Looper.getMainLooper());
+//        usb_init(); // todo probar si esto hace lo que yo pienso que hace ->
+//         no, no hace eso, arruina algo pero no se que.
     }
-//    @Override
-//    public void onCreate(@Nullable Bundle savedInstanceState) {
-//        super.onCreate(savedInstanceState);
-//        setHasOptionsMenu(true);
-//        setRetainInstance(true);
-//        deviceId = getArguments().getInt("device");
-//        portNum = getArguments().getInt("port");
-//        baudRate = getArguments().getInt("baud");
-//        withIoManager = getArguments().getBoolean("withIoManager");
-//    }
+
     private void connect() {
         UsbDevice device = null;
         UsbManager usbManager = (UsbManager) context.getSystemService(Context.USB_SERVICE);
@@ -140,6 +128,7 @@ public class SerialManager implements SerialInputOutputManager.Listener, Lifecyc
         }
     }
     private void disconnect() {
+        status("connection desconectada: ");
         connected = false;
 //        controlLines.stop();
         if(usbIoManager != null) {
@@ -152,9 +141,9 @@ public class SerialManager implements SerialInputOutputManager.Listener, Lifecyc
         } catch (IOException ignored) {}
         usbSerialPort = null;
     }
-    public void usb_init() {
-        ContextCompat.registerReceiver(context, broadcastReceiver, new IntentFilter(INTENT_ACTION_GRANT_USB), ContextCompat.RECEIVER_NOT_EXPORTED);
-    }
+//    public void usb_init() {
+//        ContextCompat.registerReceiver(context, broadcastReceiver, new IntentFilter(INTENT_ACTION_GRANT_USB), ContextCompat.RECEIVER_NOT_EXPORTED);
+//    }
 
     public void usb_close() {
         context.unregisterReceiver(broadcastReceiver);
@@ -176,8 +165,16 @@ public class SerialManager implements SerialInputOutputManager.Listener, Lifecyc
     }
     @Override
     public void onNewData(byte[] data) {
+//        Log.d(TAG, "ejecutando_on_new_data" + "" + "");
         mainLooper.post(() -> {
-            receive(data);
+            String receivedData = new String(data);
+            messageBuffer.append(receivedData);
+            int delimiterIndex;
+            while ((delimiterIndex = messageBuffer.indexOf(MESSAGE_DELIMITER)) != -1) {
+                String message = messageBuffer.substring(0, delimiterIndex);
+                status(message);
+                messageBuffer.delete(0, delimiterIndex + MESSAGE_DELIMITER.length());
+            }
         });
     }
 
@@ -188,15 +185,17 @@ public class SerialManager implements SerialInputOutputManager.Listener, Lifecyc
             disconnect();
         });
     }
-    private void send(String str) {
+    public void send(String str) {
+        status("enviando_mensaje" + str);
         if(!connected) {
             status("not connected");
             return;
         }
         try {
             byte[] data = (str + '\n').getBytes();
-            usbSerialPort.write(data, WRITE_WAIT_MILLIS);
+            usbSerialPort.write(data, 0);//WRITE_WAIT_MILLIS); #todo, probar esto así a ver que pasa
         } catch (Exception e) {
+            status("no se que paso: ");
             onRunError(e);
         }
     }
@@ -219,14 +218,16 @@ public class SerialManager implements SerialInputOutputManager.Listener, Lifecyc
     }
 
     private void receive(byte[] data) {
-//        Log.d(TAG, "ejecutando_receive" + "" + "");
+        Log.d(TAG, "ejecutando_receive" );
         if(data.length > 0) {
             StringBuilder sb = new StringBuilder();
             sb.append(HexDump.dumpHexString(data));
             sb.append("\n");
             String decodedString = new String(data, StandardCharsets.UTF_8);
-//            status(sb.toString());
             status(decodedString);
+            // la primera llegada es temperatura,
+            //separada por un hola y luego humedad
+            // chekear tamaño memoria
         }
     }
 
