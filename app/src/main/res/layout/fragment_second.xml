@@ -5,12 +5,57 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:padding="16dp">
+    <LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="8dp"
+        android:gravity="center_vertical">
+
+        <!-- Contenedor para los TextViews (parte izquierda) -->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_weight="1">
+
+            <TextView
+                android:id="@+id/text_carta_actual"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Actual"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/text_cantidad_cartas"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Cantidad"
+                android:textSize="16sp" />
+        </LinearLayout>
+
+        <!-- Botón 1 (parte derecha) -->
+        <Button
+            android:id="@+id/button_izq_carta"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="&lt;&lt;--" />
+
+        <!-- Botón 2 (parte derecha) -->
+        <Button
+            android:id="@+id/button_der_carta"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="--&gt;&gt;"
+            android:layout_marginStart="8dp" />
+    </LinearLayout>
 
     <EditText
         android:id="@+id/latitude_input"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Latitude"
+        android:hint="Latitude: x.xxxxx"
         android:inputType="numberDecimal"
         android:minHeight="48dp" />
 
@@ -18,7 +63,7 @@
         android:id="@+id/longitude_input"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Longitude"
+        android:hint="Longitude: x.xxxxx"
         android:inputType="numberDecimal"
         android:minHeight="48dp" />
 
@@ -27,8 +72,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:autofillHints=""
-        android:hint="Date"
-        android:inputType="date"
+        android:hint="Date: dd/mm/yyyy"
+        android:inputType="text"
         android:minHeight="48dp"
         tools:ignore="VisualLintTextFieldSize" />
 
@@ -37,7 +82,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:autofillHints=""
-        android:hint="Time"
+        android:hint="Time: 24h hh:mm:ss"
         android:inputType="time"
         android:minHeight="48dp"
         android:textColorHint="#A1887F" />
@@ -46,7 +91,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:autofillHints=""
-        android:hint="angulo_relativo"
+        android:hint="angulo_relativo: 360°"
         android:inputType="time"
         android:minHeight="48dp"
         android:textColorHint="#A1887F" />
@@ -60,19 +105,35 @@
         android:layout_marginTop="16dp">
 
         <Button
-            android:id="@+id/button1"
+            android:id="@+id/button_aceptar"
             style="?android:attr/buttonBarButtonStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="aceptar" />
 
         <Button
-            android:id="@+id/button2"
+            android:id="@+id/button_limpiar"
             style="?android:attr/buttonBarButtonStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="16dp"
             android:layout_marginStart="16dp"
             android:text="Limpiar" />
+        <Button
+            android:id="@+id/button_aniadir"
+            style="?android:attr/buttonBarButtonStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:layout_marginStart="16dp"
+            android:text="aniadir" />
+<!--        <Button-->
+<!--            android:id="@+id/button_borrar"-->
+<!--            style="?android:attr/buttonBarButtonStyle"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_marginLeft="16dp"-->
+<!--            android:layout_marginStart="16dp"-->
+<!--            android:text="borrar" />-->
     </LinearLayout>
 </LinearLayout>
