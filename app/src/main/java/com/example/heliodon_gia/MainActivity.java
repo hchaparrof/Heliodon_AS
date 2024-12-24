@@ -9,7 +9,10 @@ import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 import android.util.Log;
 
-public class MainActivity extends AppCompatActivity implements FragmentManager.OnBackStackChangedListener, FirstFragment.OnButtonClickListener_1 {
+import java.util.ArrayList;
+import java.util.List;
+
+public class MainActivity extends AppCompatActivity implements FragmentManager.OnBackStackChangedListener, FirstFragment.OnButtonClickListener_1, SecondFragment.OnButtonClickListener_aceptar {
     private static final String TAG = "MainActivity_2";
     public DeviceManager device_manager;
     public SerialManager serialManager;
@@ -160,5 +163,14 @@ public class MainActivity extends AppCompatActivity implements FragmentManager.O
         if(this.serialManager != null) {
             this.serialManager.send(String.valueOf(a));
         }
+    }
+
+    @Override
+    public void onButton_aceptar_Click(List<Carta> lista_posiciones) {
+        List<Coordenadas> puntos_coordenados = new ArrayList<Coordenadas>();
+        for (int i = 0; i < lista_posiciones.size(); i++){
+            puntos_coordenados.add(NOAA.calc_Noaa(lista_posiciones.get(i)));
+        }
+        this.serialManager.send(puntos_coordenados);
     }
 }

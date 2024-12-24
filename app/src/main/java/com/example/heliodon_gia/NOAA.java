@@ -1,7 +1,19 @@
 package com.example.heliodon_gia;
 
 public class NOAA {
-    public static Coordenadas calc_Noaa(int anio, int mes, int dia, int hora, int minutos, int segundos, float latitud, float longitud, float time_zone) {
+    public static Coordenadas calc_Noaa(Carta carta){//int anio, int mes, int dia, int hora, int minutos, int segundos, float latitud, float longitud, float time_zone) {
+        String[] fechaPartes = carta.getFecha().split("/"); // Asumiendo formato "yyyy-MM-dd"
+        int anio = Integer.parseInt(fechaPartes[0]);
+        int mes = Integer.parseInt(fechaPartes[1]);
+        int dia = Integer.parseInt(fechaPartes[2]);
+        String[] horaPartes = carta.getHora().split(":"); // Asumiendo formato "HH:mm:ss"
+        int hora = Integer.parseInt(horaPartes[0]);
+        int minutos = Integer.parseInt(horaPartes[1]);
+        int segundos = horaPartes.length > 2 ? Integer.parseInt(horaPartes[2]) : 0;
+        double latitud = carta.getLatitud();
+        double longitud = carta.getLongitud();
+        int angulo = carta.getAng();
+        int time_zone = -6;
 //        int anio = 2019;
 //        int mes = 1;
 //        int dia = 1;
@@ -44,12 +56,12 @@ public class NOAA {
         float HA_Sunrise = (float) (Math.toDegrees(Math.acos(Math.cos(Math.toRadians(90.833f)) /
                 (Math.cos(Math.toRadians(latitud)) * Math.cos(Math.toRadians(Sun_Declin))) -
                 Math.tan(Math.toRadians(latitud)) * Math.tan(Math.toRadians(Sun_Declin)))));
-        float Solar_Noon = (720 - 4 * longitud - Eq_of_Time + time_zone * 60) / 1440;
+        float Solar_Noon = (float) ((720 - 4 * longitud - Eq_of_Time + time_zone * 60) / 1440);
         float Sunrise_Time = Solar_Noon - HA_Sunrise * 4 / 1440;
         float Sunset_Time = Solar_Noon + HA_Sunrise * 4 / 1440;
         float Sunlight_Duration = 8 * HA_Sunrise;
-        float True_Solar_Time = (float) (residuo(fecha.en_minutos() + Eq_of_Time + 4 *
-                longitud - 60 * time_zone, 1440));
+        float True_Solar_Time = (float) (residuo((float) (fecha.en_minutos() + Eq_of_Time + 4 *
+                        longitud - 60 * time_zone), 1440));
         float Hour_Angle = 0;
         if(True_Solar_Time / 4 < 0){
             Hour_Angle = True_Solar_Time / 4 + 180;
@@ -101,7 +113,7 @@ public class NOAA {
 //                (Math.cos(Math.toRadians(latitud)) * Math.sin(Math.toRadians(Solar_Zenith_Angle))))), 360));
         System.out.println(Solar_Azimuth_Angle);
         System.out.println(Solar_Zenith_Angle);
-        return new Coordenadas(Solar_Zenith_Angle, Solar_Azimuth_Angle);
+        return new Coordenadas(Solar_Zenith_Angle, Solar_Azimuth_Angle + angulo, false);
     }
     private static float anio_juliano(Tiempo fecha){
         int julian_month = 0;

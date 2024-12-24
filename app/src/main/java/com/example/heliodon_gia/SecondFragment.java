@@ -1,5 +1,6 @@
 package com.example.heliodon_gia;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -11,6 +12,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 import java.util.ArrayList;
@@ -40,6 +42,19 @@ public class SecondFragment extends Fragment {
     private Button flecha_der;
     public SecondFragment() {
         // Required empty public constructor
+    }
+    public interface OnButtonClickListener_aceptar {
+        void onButton_aceptar_Click(List<Carta> lista_posiciones);
+    }
+    private SecondFragment.OnButtonClickListener_aceptar callback;
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        try {
+            callback = (SecondFragment.OnButtonClickListener_aceptar) context;
+        } catch (ClassCastException e) {
+            throw new ClassCastException(context.toString() + " must implement OnFragmento2ButtonClickListener");
+        }
     }
 
     @Override
@@ -71,6 +86,12 @@ public class SecondFragment extends Fragment {
         limpiar.setOnClickListener(v -> limpiarContenido());
         aniadir.setOnClickListener(v -> aniadirContenido());
         //
+        aceptar.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                Log.d("MainActivity", "se oprimio un boton_en fragmento");
+                callback.onButton_aceptar_Click(cartas);
+            }
+                                   });
         cambiar_cantidad(0);
         cambiar_actual(0);
         return view;

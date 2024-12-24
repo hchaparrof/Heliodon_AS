@@ -23,6 +23,8 @@ import java.io.IOException;
 import androidx.core.content.ContextCompat;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
+import java.util.List;
+
 import com.hoho.android.usbserial.util.HexDump;
 
 public class SerialManager implements SerialInputOutputManager.Listener {
@@ -30,6 +32,10 @@ public class SerialManager implements SerialInputOutputManager.Listener {
     private final BroadcastReceiver broadcastReceiver;
 //    private LifecycleRegistry lifecycleRegistry = new LifecycleRegistry(this);
     private StringBuilder messageBuffer = new StringBuilder();
+
+    public void send(List<Coordenadas> puntosCoordenados) {
+        // todo la comunicación con esto
+    }
 
 
     private enum UsbPermission { Unknown, Requested, Granted, Denied }
