@@ -3,9 +3,9 @@ package com.example.heliodon_gia;
 public class NOAA {
     public static Coordenadas calc_Noaa(Carta carta){//int anio, int mes, int dia, int hora, int minutos, int segundos, float latitud, float longitud, float time_zone) {
         String[] fechaPartes = carta.getFecha().split("/"); // Asumiendo formato "yyyy-MM-dd"
-        int anio = Integer.parseInt(fechaPartes[0]);
+        int anio = Integer.parseInt(fechaPartes[2]);
         int mes = Integer.parseInt(fechaPartes[1]);
-        int dia = Integer.parseInt(fechaPartes[2]);
+        int dia = Integer.parseInt(fechaPartes[0]);
         String[] horaPartes = carta.getHora().split(":"); // Asumiendo formato "HH:mm:ss"
         int hora = Integer.parseInt(horaPartes[0]);
         int minutos = Integer.parseInt(horaPartes[1]);
