@@ -26,4 +26,30 @@ public class VerificadorCartas{
         // Devuelve true si solo hay una diferencia
         return diferencias == 1;
     }
+    public static int primera_diferencia(Carta carta1, Carta carta2) {
+        int diferencias = 0;
+        diferencias++;
+        if (Double.compare(carta1.getLatitud(), carta2.getLatitud()) != 0) {
+            return diferencias;
+        }
+        diferencias++;
+        if (Double.compare(carta1.getLongitud(), carta2.getLongitud()) != 0) {
+            return diferencias;
+        }
+        diferencias++;
+        if (!carta1.getFecha().equals(carta2.getFecha())) {
+            return diferencias;
+        }
+        diferencias++;
+        if (!carta1.getHora().equals(carta2.getHora())) {
+            return diferencias;
+        }
+        diferencias++;
+        if (carta1.getAng() != carta2.getAng()) {
+            return diferencias;
+        }
+
+        // Devuelve true si solo hay una diferencia
+        return -1;
+    }
 }

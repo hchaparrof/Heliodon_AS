@@ -5,20 +5,20 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:padding="16dp">
-    <LinearLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:gravity="center_vertical"
         android:orientation="horizontal"
-        android:padding="8dp"
-        android:gravity="center_vertical">
+        android:padding="8dp">
 
         <!-- Contenedor para los TextViews (parte izquierda) -->
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_weight="1">
+            android:layout_weight="1"
+            android:orientation="vertical">
 
             <TextView
                 android:id="@+id/text_carta_actual"
@@ -47,8 +47,8 @@
             android:id="@+id/button_der_carta"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="--&gt;&gt;"
-            android:layout_marginStart="8dp" />
+            android:layout_marginStart="8dp"
+            android:text="--&gt;&gt;" />
     </LinearLayout>
 
     <EditText
@@ -86,6 +86,7 @@
         android:inputType="time"
         android:minHeight="48dp"
         android:textColorHint="#A1887F" />
+
     <EditText
         android:id="@+id/angulo_input"
         android:layout_width="match_parent"
@@ -95,14 +96,23 @@
         android:inputType="time"
         android:minHeight="48dp"
         android:textColorHint="#A1887F" />
+    <EditText
+        android:id="@+id/repeticiones"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:autofillHints=""
+        android:hint="repeticiones: ##"
+        android:inputType="time"
+        android:minHeight="48dp"
+        android:textColorHint="#A1887F" />
 
     <LinearLayout
         style="?android:attr/buttonBarStyle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
+        android:layout_marginTop="16dp"
         android:gravity="center"
-        android:layout_marginTop="16dp">
+        android:orientation="horizontal">
 
         <Button
             android:id="@+id/button_aceptar"
@@ -116,24 +126,25 @@
             style="?android:attr/buttonBarButtonStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="16dp"
             android:layout_marginStart="16dp"
+            android:layout_marginLeft="16dp"
             android:text="Limpiar" />
+
         <Button
             android:id="@+id/button_aniadir"
             style="?android:attr/buttonBarButtonStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="16dp"
             android:layout_marginStart="16dp"
+            android:layout_marginLeft="16dp"
             android:text="aniadir" />
-<!--        <Button-->
-<!--            android:id="@+id/button_borrar"-->
-<!--            style="?android:attr/buttonBarButtonStyle"-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:layout_marginLeft="16dp"-->
-<!--            android:layout_marginStart="16dp"-->
-<!--            android:text="borrar" />-->
+        <!--        <Button-->
+        <!--            android:id="@+id/button_borrar"-->
+        <!--            style="?android:attr/buttonBarButtonStyle"-->
+        <!--            android:layout_width="wrap_content"-->
+        <!--            android:layout_height="wrap_content"-->
+        <!--            android:layout_marginLeft="16dp"-->
+        <!--            android:layout_marginStart="16dp"-->
+        <!--            android:text="borrar" />-->
     </LinearLayout>
 </LinearLayout>

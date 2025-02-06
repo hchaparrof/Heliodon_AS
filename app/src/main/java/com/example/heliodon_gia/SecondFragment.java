@@ -22,6 +22,7 @@ public class SecondFragment extends Fragment {
 //    private boolean mas_puntos = false;
     private static final String TAG = "MainActivity_2";
     private Carta carta_actual;
+    private int repeticiones = 0;
     // lista de cartas
     private List<Carta> cartas;
     //lista de manejo
@@ -30,6 +31,7 @@ public class SecondFragment extends Fragment {
     private EditText fecha;
     private EditText hora;
     private EditText angulo;
+    private EditText repeticiones_texto;
     private TextView texto_actual;
     private TextView texto_cantidad;
     private int id_carta_actual = -1;
@@ -57,6 +59,7 @@ public class SecondFragment extends Fragment {
         }
     }
 
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -69,7 +72,10 @@ public class SecondFragment extends Fragment {
         fecha = view.findViewById(R.id.date_input);
         hora = view.findViewById(R.id.time_input);
         angulo = view.findViewById(R.id.angulo_input);
+        repeticiones_texto = view.findViewById(R.id.repeticiones);
+        repeticiones_texto.setEnabled(false);
         //
+
         texto_cantidad = view.findViewById(R.id.text_cantidad_cartas);
         texto_actual = view.findViewById(R.id.text_carta_actual);
         //id flechas
@@ -155,6 +161,7 @@ public class SecondFragment extends Fragment {
         fecha.setEnabled(esUltimoElemento);
         hora.setEnabled(esUltimoElemento);
         angulo.setEnabled(esUltimoElemento);
+        repeticiones_texto.setEnabled(esUltimoElemento);
 
         if (esUltimoElemento) {
             System.out.println("Modo edición activado: Se pueden editar los campos.");
@@ -170,6 +177,7 @@ public class SecondFragment extends Fragment {
         String dateText = fecha.getText().toString().trim();
         String timeText = hora.getText().toString().trim();
         String anguloText = angulo.getText().toString().trim();
+        String repeticionesText = repeticiones_texto.getText().toString().trim();
         //todo quitar los toast
         Log.d(TAG, "intentando_parsear_las_cosas");
         if (TextUtils.isEmpty(latitudeText) || !isValidLatitude(latitudeText)) {
@@ -197,27 +205,80 @@ public class SecondFragment extends Fragment {
             return;
         }
         Log.d(TAG, "parseado_angulo");
+        if (TextUtils.isEmpty(repeticionesText) || !isValidRepeticiones(repeticionesText)) {
+            Toast.makeText(getContext(), "Ingrese un número entero válido mayor a 0", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        Log.d(TAG, "parseado_repeticiones");
         // Convertir los valores a los tipos adecuados
         double latitude = Double.parseDouble(latitudeText);
         double longitude = Double.parseDouble(longitudeText);
         int angulo = Integer.parseInt(anguloText);
+        repeticiones = Integer.parseInt(repeticionesText);
         Log.d(TAG, "antes_de_aniadir");
         Carta carta_provisional = new Carta(latitude, longitude, dateText, timeText, angulo);
         if (cartas.isEmpty()){
             cartas.add(carta_provisional);
             cambiar_carta(1);
             cambiar_cantidad(cartas.size());
+            repeticiones_texto.setEnabled(true);
         }else {
-            if (VerificadorCartas.difierenEnUnCampo(carta_actual, carta_provisional)) {
-                cartas.add(carta_provisional);
-                cambiar_carta(1);
-                cambiar_cantidad(cartas.size());
-                Toast.makeText(getContext(), "carta_nueva_aniadida", Toast.LENGTH_SHORT).show();
-            } else {
-                Toast.makeText(getContext(), "no_se_hizo_nada,cambie_solo_un_campo", Toast.LENGTH_SHORT).show();
+            if (repeticiones == 1){
+                if (VerificadorCartas.difierenEnUnCampo(carta_actual, carta_provisional)) {
+                    cartas.add(carta_provisional);
+                    cambiar_carta(1);
+                    cambiar_cantidad(cartas.size());
+                    Toast.makeText(getContext(), "carta_nueva_aniadida", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(getContext(), "no_se_hizo_nada,cambie_solo_un_campo", Toast.LENGTH_SHORT).show();
+                }
+                Log.d(TAG, "despues_de_aniadir");
             }
-            Log.d(TAG, "despues_de_aniadir");
+            int campoDiferente = VerificadorCartas.primera_diferencia(carta_actual, carta_provisional);
+
+            for (int i = 1; i <= repeticiones; i++) {
+                double nuevaLatitud = carta_actual.getLatitud();
+                double nuevaLongitud = carta_actual.getLongitud();
+                String nuevaFecha = carta_actual.getFecha();
+                String nuevaHora = carta_actual.getHora();
+                int nuevoAngulo = carta_actual.getAng();
+
+                // Modificar el campo que varía progresivamente
+                switch (campoDiferente) {
+                    case 1:
+                        nuevaLatitud = carta_actual.getLatitud() +
+                                (i * (carta_provisional.getLatitud() - carta_actual.getLatitud()) / repeticiones);
+                        break;
+                    case 2:
+                        nuevaLongitud = carta_actual.getLongitud() +
+                                (i * (carta_provisional.getLongitud() - carta_actual.getLongitud()) / repeticiones);
+                        break;
+                    case 3:
+                        nuevaFecha = carta_provisional.getFecha(); // Aquí podríamos interpolar fechas si es necesario
+                        break;
+                    case 4:
+                        // Convertir Strings a objetos Tiempo
+                        Tiempo tiempoActual = Tiempo.horadesdeString(carta_actual.getHora());
+                        Tiempo tiempoProvisional = Tiempo.horadesdeString(carta_provisional.getHora());
+
+                        // Interpolar la hora
+                        double t = (double) i / repeticiones;
+                        Tiempo tiempoInterpolado = Tiempo.interpolarHora(tiempoActual, tiempoProvisional, t);
+
+                        // Convertir de nuevo a String
+                        nuevaHora = tiempoInterpolado.aString();
+                        break;
+                    case 5:
+                        nuevoAngulo = carta_actual.getAng() +
+                                (i * (carta_provisional.getAng() - carta_actual.getAng()) / repeticiones);
+                        break;
+                }
+                Carta nuevaCarta = new Carta(nuevaLatitud, nuevaLongitud, nuevaFecha, nuevaHora, nuevoAngulo);
+                cartas.add(nuevaCarta);
+            }
         }
+            cambiar_carta(1);
+            cambiar_cantidad(cartas.size());
     }
 
     private void cambiar_cantidad(int numero) {
@@ -256,6 +317,14 @@ public class SecondFragment extends Fragment {
             return ang >= 0 && ang <= 360;
         } catch (NumberFormatException e) {
             return false;
+        }
+    }
+    private boolean isValidRepeticiones(String repeticiones) {
+        try {
+            int rep = Integer.parseInt(repeticiones);
+            return rep > 0; // Verifica que sea mayor a 0
+        } catch (NumberFormatException e) {
+            return false; // No es un número entero válido
         }
     }
     private void limpiarContenido() {

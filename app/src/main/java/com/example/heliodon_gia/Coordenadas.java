@@ -5,7 +5,6 @@ import androidx.annotation.NonNull;
 import lombok.Getter;
 
 
-
 import java.lang.Math;
 
 @Getter
@@ -29,7 +28,6 @@ public class Coordenadas {
         }
 
     }
-
     @NonNull
     @Override
     public String toString() {

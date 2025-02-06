@@ -1,15 +1,21 @@
 package com.example.heliodon_gia;
 
 public class NOAA {
+    public static Tiempo parsear_fecha(String[] fecha, String[] hora){
+        int anio = Integer.parseInt(fecha[2]);
+        int mes = Integer.parseInt(fecha[1]);
+        int dia = Integer.parseInt(fecha[0]);
+        int hora_2 = Integer.parseInt(hora[0]);
+        int minutos = Integer.parseInt(hora[1]);
+        int segundos = hora.length > 2 ? Integer.parseInt(hora[2]) : 0;
+        return new Tiempo(anio, mes, dia, hora_2, minutos, segundos);
+    }
     public static Coordenadas calc_Noaa(Carta carta){//int anio, int mes, int dia, int hora, int minutos, int segundos, float latitud, float longitud, float time_zone) {
         String[] fechaPartes = carta.getFecha().split("/"); // Asumiendo formato "yyyy-MM-dd"
-        int anio = Integer.parseInt(fechaPartes[2]);
-        int mes = Integer.parseInt(fechaPartes[1]);
-        int dia = Integer.parseInt(fechaPartes[0]);
+
         String[] horaPartes = carta.getHora().split(":"); // Asumiendo formato "HH:mm:ss"
-        int hora = Integer.parseInt(horaPartes[0]);
-        int minutos = Integer.parseInt(horaPartes[1]);
-        int segundos = horaPartes.length > 2 ? Integer.parseInt(horaPartes[2]) : 0;
+
+
         double latitud = carta.getLatitud();
         double longitud = carta.getLongitud();
         int angulo = carta.getAng();
@@ -23,7 +29,7 @@ public class NOAA {
 //        float latitud = 40;
 //        float longitud = -105;
 //        float time_zone = -6;
-        Tiempo fecha = new Tiempo(anio, mes, dia, hora, minutos, segundos);
+        Tiempo fecha = parsear_fecha(fechaPartes, horaPartes); //new Tiempo(anio, mes, dia, hora, minutos, segundos);
         float juliano = anio_juliano(fecha);
         System.out.println(juliano);
         float julian_century = (juliano - 2451545)/36525f;
