@@ -205,7 +205,7 @@ public class SecondFragment extends Fragment {
             return;
         }
         Log.d(TAG, "parseado_angulo");
-        if (TextUtils.isEmpty(repeticionesText) || !isValidRepeticiones(repeticionesText)) {
+        if ( !isValidRepeticiones(repeticionesText)) {
             Toast.makeText(getContext(), "Ingrese un número entero válido mayor a 0", Toast.LENGTH_SHORT).show();
             return;
         }
@@ -214,7 +214,11 @@ public class SecondFragment extends Fragment {
         double latitude = Double.parseDouble(latitudeText);
         double longitude = Double.parseDouble(longitudeText);
         int angulo = Integer.parseInt(anguloText);
-        repeticiones = Integer.parseInt(repeticionesText);
+        if (repeticionesText.isEmpty()){
+            repeticiones =1;
+        }else{
+            repeticiones = Integer.parseInt(repeticionesText);
+        }
         Log.d(TAG, "antes_de_aniadir");
         Carta carta_provisional = new Carta(latitude, longitude, dateText, timeText, angulo);
         if (cartas.isEmpty()){
@@ -320,6 +324,9 @@ public class SecondFragment extends Fragment {
         }
     }
     private boolean isValidRepeticiones(String repeticiones) {
+        if (repeticiones.isEmpty()){
+            return true;
+        }
         try {
             int rep = Integer.parseInt(repeticiones);
             return rep > 0; // Verifica que sea mayor a 0
@@ -338,5 +345,13 @@ public class SecondFragment extends Fragment {
         angulo.setText("");
         cambiar_cantidad(cartas.size());
         cambiar_actual(0);
+        latitud.setEnabled(true);
+        longitud.setEnabled(true);
+        fecha.setEnabled(true);
+        hora.setEnabled(true);
+        angulo.setEnabled(true);
+        repeticiones_texto.setEnabled(false);
+        repeticiones_texto.setText("");
+        repeticiones_texto.setHint("##");
     }
 }
